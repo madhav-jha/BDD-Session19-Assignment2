@@ -1,0 +1,21 @@
+
+
+including hbase jar file in pig classpath
+
+export PIG_CLASSPATH=/home/hadoop/HADOOP/hbase-0.98.4-hadoop2/lib/hbase-server-0.98.4-hadoop2:/home/hadoop/HADOOP/hbase-0.98.4-hadoop2/lib/hbase-*.jar;
+
+creating hbase table
+
+create 'student', 'student_details'
+
+loading data into pig relation
+
+pig -x local
+
+student_raw = load '/home/acadgild/development/pig/datasets/student.txt' using PigStorage(',') as (StudentName:chararray, sector:chararray, DOB:chararray,qualification:chararray, score:int, state:chararray, randomName:chararray);
+
+loading data from pig relation to hbase table
+
+store student_raw into 'hbase://student' using org.apache.pig.backend.hadoop.hbase.HBaseStorage('student_details:StudentName, student_details:sector, student_details:DOB, student_details:qualification, student_details:score, student_details:state, student_details:randomName');
+
+scan 'student'
